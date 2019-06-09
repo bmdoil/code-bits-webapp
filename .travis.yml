@@ -5,17 +5,6 @@ services:
 
 env:
    - DOCKER_COMPOSE_VERSION: 1.24.0
-   - COMMIT: ${TRAVIS_COMMIT::8}
-   - MAIN_REPO: https://github.com/bmdoil/code-bites.git
-   - SERVER: code-bites-server
-   - SERVER_REPO: ${MAIN_REPO}#${TRAVIS_BRANCH}:services/server
-   - SERVER_DB: code-bites-db
-   - SERVER_DB_REPO: ${MAIN_REPO}#${TRAVIS_BRANCH}:services/server/project/db
-   - CLIENT: code-bites-client
-   - CLIENT_REPO: ${MAIN_REPO}#${TRAVIS_BRANCH}:services/client
-   - SWAGGER: code-bites-swagger
-   - SWAGGER_REPO: ${MAIN_REPO}#${TRAVIS_BRANCH}:services/swagger
-   - SECRET_KEY: osucs493finalproject
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
@@ -28,11 +17,9 @@ before_script:
   - npm install
 
 script:
-  - bash test-ci.sh $TRAVIS_BRANCH
+  - bash test.sh
 
 after_success:
-  - bash ./docker-push.sh
-  - bash ./docker-deploy-prod.sh
 
 after_script:
   - docker-compose down

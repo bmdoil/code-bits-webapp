@@ -3,6 +3,7 @@ env
 services/server/htmlcov
 node_modules
 services/client/node_modules
-.vscode/*
+.vscode
 docker-compose-prod.yml
 node_modules
+
