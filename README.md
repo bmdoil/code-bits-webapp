@@ -1,6 +1,6 @@
-##Grading Branch for CS493 Final Project
+## Grading Branch for CS493 Final Project
 
-##Setup:
+## Setup:
 
 - Fork the repository: https://github.com/bmdoil/cs493-grading.git
 
@@ -10,7 +10,7 @@
 
 ## To test the live routes
 
-- app.brentdoil.com/swagger
+- [Navigate to my API documentation](http://app.brentdoil.com/swagger)
 
 ## To test locally:
 
