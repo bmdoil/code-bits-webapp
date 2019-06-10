@@ -31,7 +31,7 @@
 
 ##To test with Travis CI
 
-- After forking the repository, sign up on travis-ci.org if you don't already have an account
+- Fork or clone the repo, then sign up on travis-ci.org if you don't already have an account
 
 - Navigate to the repo on travis: https://travis-ci.org/[yourusername]/bdoil-cs493-grading-final
 
