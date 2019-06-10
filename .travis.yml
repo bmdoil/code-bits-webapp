@@ -17,9 +17,7 @@ before_script:
   - npm install
 
 script:
-  - bash test.sh
-
-after_success:
+  - docker-compose exec server python manage.py test
 
 after_script:
   - docker-compose down

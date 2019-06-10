@@ -1,4 +1,22 @@
 components:
+  links:
+    getNextPage:
+      description: Link to next page of results
+      operationID: nextPage
+      parameters:
+        next_page: '$response.body#/next_page'
+    getPrevPage:
+      description: Link to previous page of results
+      operationID: prevPage
+      parameters:
+        next_page: '$response.body#/prev_page'
+  parameters:
+    pageParam:
+      in: query
+      name: page
+      schema:
+        type: integer
+      description: Page number of results
   schemas:
     admin:
       properties:
@@ -130,142 +148,11 @@ paths:
       security:
       - bearerAuth: []
       summary: Signs a user out. This only works client side, the server can't delete
-        your JWT stored in broswer cache. Click the signout button on the navbar to
-        test
-  /question/{question_id}/user/{user_id}:
-    delete:
-      parameters:
-      - description: ID of question to fetch
-        in: path
-        name: question_id
-        required: true
-        schema:
-          format: int64
-          type: integer
-      - description: ID of user who owns (created) the question
-        in: path
-        name: user_id
-        required: true
-        schema:
-          format: int64
-          type: integer
-      responses:
-        204:
-          description: Question deleted
-        403:
-          description: Not authorized to delete this question
-        404:
-          description: Question does not exist
-        406:
-          description: invalid content-type
-      security:
-      - bearerAuth: []
-      summary: Deletes the question
-    get:
-      parameters:
-      - description: ID of question to fetch
-        in: path
-        name: question_id
-        required: true
-        schema:
-          format: int64
-          type: integer
-      - description: ID of user who owns (created) the question
-        in: path
-        name: user_id
-        required: true
-        schema:
-          format: int64
-          type: integer
-      responses:
-        200:
-          description: Question object
-        403:
-          description: Not authorized to view this question
-        404:
-          description: Question does not exist
-        406:
-          description: invalid content-type
-      security:
-      - bearerAuth: []
-      summary: Returns the user's question by question_id
-    put:
-      parameters:
-      - description: ID of question to fetch
-        in: path
-        name: question_id
-        required: true
-        schema:
-          format: int64
-          type: integer
-      - description: ID of user who owns (created) the question
-        in: path
-        name: user_id
-        required: true
-        schema:
-          format: int64
-          type: integer
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/question'
-        description: Question to update
-        required: true
-      responses:
-        201:
-          description: Question object
-        403:
-          description: Not authorized to update this question
-        404:
-          description: Question does not exist
-        406:
-          description: invalid content-type
-      security:
-      - bearerAuth: []
-      summary: Updates the question and returns the updated question object
-  /questions:
-    get:
-      responses:
-        200:
-          description: List of question objects
-        403:
-          description: You must be signed in to view all questions
-      security:
-      - bearerAuth: []
-      summary: Returns all questions. Only admin users can view this route.
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/question'
-        description: Question to add
-        required: true
-      responses:
-        201:
-          description: Question added
-        400:
-          description: Invalid payload
-        403:
-          description: Not authorized to create a question
-        406:
-          description: invalid content-type
-      security:
-      - bearerAuth: []
-      summary: Adds a new question
-  /questions/user:
-    get:
-      responses:
-        200:
-          description: List of question objects
-        403:
-          description: You must be signed in to view your questions
-      security:
-      - bearerAuth: []
-      summary: Returns all questions by the authenticated user
+        your JWT stored in broswer cache. Click the signout button on the navbar to test
   /users:
     get:
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
       responses:
         200:
           description: user object
@@ -274,6 +161,11 @@ paths:
       security:
       - bearerAuth: []
       summary: Returns all users
+      links:
+        GetNextUserPage:
+          $ref: '#components/links/nextPage'
+        GetPrevUserPage:
+          $ref: '#components/links/prevPage'
     post:
       requestBody:
         content:
@@ -371,5 +263,299 @@ paths:
       security:
       - bearerAuth: []
       summary: Updates the user and returns the updated user object
+  /questions:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        200:
+          description: List of question objects
+        403:
+          description: You must be signed in to view all questions
+      security:
+      - bearerAuth: []
+      summary: Returns all questions.
+      links:
+        GetNextQuestionsPage:
+          $ref: '#components/links/nextPage'
+        GetPrevQuestionsPage:
+          $ref: '#components/links/prevPage'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/question'
+        description: Question to add
+        required: true
+      responses:
+        201:
+          description: Question added
+        400:
+          description: Invalid payload
+        403:
+          description: Not authorized to create a question
+        406:
+          description: invalid content-type
+      security:
+      - bearerAuth: []
+      summary: Adds a new question
+  /questions/user:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        200:
+          description: List of question objects
+        403:
+          description: You must be signed in to view your questions
+      security:
+      - bearerAuth: []
+      summary: Returns all questions by the authenticated user
+      links:
+        GetNextQuestionsPage:
+          $ref: '#components/links/nextPage'
+        GetPrevQuestionsPage:
+          $ref: '#components/links/prevPage'
+  /question/{question_id}/user/{user_id}:
+    delete:
+      parameters:
+      - description: ID of question to fetch
+        in: path
+        name: question_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: ID of user who owns (created) the question
+        in: path
+        name: user_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        204:
+          description: Question deleted
+        403:
+          description: Not authorized to delete this question
+        404:
+          description: Question does not exist
+        406:
+          description: invalid content-type
+      security:
+      - bearerAuth: []
+      summary: Deletes the question
+    get:
+      parameters:
+      - description: ID of question to fetch
+        in: path
+        name: question_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: ID of user who owns (created) the question
+        in: path
+        name: user_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        200:
+          description: Question object
+        403:
+          description: Not authorized to view this question
+        404:
+          description: Question does not exist
+        406:
+          description: invalid content-type
+      security:
+      - bearerAuth: []
+      summary: Returns the user's question by question_id
+    put:
+      parameters:
+      - description: ID of question to fetch
+        in: path
+        name: question_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: ID of user who owns (created) the question
+        in: path
+        name: user_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/question'
+        description: Question to update
+        required: true
+      responses:
+        201:
+          description: Question object
+        403:
+          description: Not authorized to update this question
+        404:
+          description: Question does not exist
+        406:
+          description: invalid content-type
+      security:
+      - bearerAuth: []
+      summary: Updates the question and returns the updated question object
+
+  /scores:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        200:
+          description: List of score objects
+        403:
+          description: You must be signed in as an admin to view all scores
+      security:
+      - bearerAuth: []
+      summary: Returns all scores. Must be signed in as admin
+      links:
+        GetNextScoresPage:
+          $ref: '#components/links/nextPage'
+        GetPrevScoresPage:
+          $ref: '#components/links/prevPage'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/score'
+        description: Score to add
+        required: true
+      responses:
+        201:
+          description: Score added
+        400:
+          description: Invalid payload
+        403:
+          description: Not authorized to create a score
+        406:
+          description: invalid content-type
+      security:
+      - bearerAuth: []
+      summary: Adds a new score.
+
+  /scores/user:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        200:
+          description: List of score objects for the authenticated user
+        403:
+          description: You must be signed in to view your scores
+      security:
+      - bearerAuth: []
+      summary: Returns all scores for the authenticated user
+      links:
+        GetNextScoresPage:
+          $ref: '#components/links/nextPage'
+        GetPrevScoresPage:
+          $ref: '#components/links/prevPage'
+  /score/{score_id}/user/{user_id}:
+    delete:
+      parameters:
+      - description: ID of score to fetch
+        in: path
+        name: score_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: ID of user that has this score
+        in: path
+        name: user_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        204:
+          description: Score deleted
+        403:
+          description: Not authorized to delete this score
+        404:
+          description: Score does not exist
+        406:
+          description: invalid content-type
+      security:
+      - bearerAuth: []
+      summary: Deletes the score
+    get:
+      parameters:
+      - description: ID of score to fetch
+        in: path
+        name: score_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: ID of user that has this score
+        in: path
+        name: user_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        200:
+          description: Score object
+        403:
+          description: Not authorized to view this score
+        404:
+          description: Score does not exist
+        406:
+          description: invalid content-type
+      security:
+      - bearerAuth: []
+      summary: Returns the user's score by score_id
+    put:
+      parameters:
+      - description: ID of score to update
+        in: path
+        name: score
+        required: true
+        schema:
+          format: int64
+          type: integer
+      - description: ID of user that has this score
+        in: path
+        name: user_id
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/score'
+        description: Score to update
+        required: true
+      responses:
+        201:
+          description: Score object
+        403:
+          description: Not authorized to update this score
+        404:
+          description: Score does not exist
+        406:
+          description: invalid content-type
+      security:
+      - bearerAuth: []
+      summary: Updates the score and returns the updated score object
 servers:
-- url: http://app.brentdoil.com
+- url: http://localhost
