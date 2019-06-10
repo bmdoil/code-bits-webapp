@@ -31,7 +31,14 @@ const NavBar = (props) => (
                         <Link to="/all-scores" className="navbar-item">All Scores</Link>
                     }
                     <a href="/swagger" className="navbar-item">API</a>
-                </div>            
+                </div>
+
+            </div>
+        </section>
+    </nav>
+)
+
+{/*                            
                 <div className="navbar-end">
                     {!props.isAuthenticated &&
                         <Link to="/register" className="navbar-item">Register</Link>
@@ -45,12 +52,6 @@ const NavBar = (props) => (
                     {props.isAuthenticated &&
                         <Link to="/signout" className="navbar-item">Signout</Link>
                     }                    
-                </div>
-            </div>
-        </section>
-    </nav>
-)
-
-
+                </div>*/}
 
 export default NavBar;
