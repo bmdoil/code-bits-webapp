@@ -1,4 +1,4 @@
-https://travis-ci.org/bmdoil/bdoil-cs493-grading-final.svg?branch=master
+[![Build Status](https://travis-ci.org/bmdoil/bdoil-cs493-grading-final.svg?branch=master)](https://travis-ci.org/bmdoil/bdoil-cs493-grading-final)
 
 ## Grading Branch for CS493 Final Project
 
