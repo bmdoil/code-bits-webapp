@@ -33,7 +33,7 @@
 
 - After forking the repository, sign up on travis-ci.org if you don't already have an account
 
-- Navigate to the repo on travis: https://travis-ci.org/[yourusername]/bdoil-cs493-grading
+- Navigate to the repo on travis: https://travis-ci.org/[yourusername]/bdoil-cs493-grading-final
 
 - Click 'Activate Repository'
 
