@@ -9,6 +9,7 @@ from sqlalchemy.exc import IntegrityError
 class TestUserModel(BaseTestCase):
     def test_add_user(self):
         user = add_user('testname','test@email.com', 'testpass')
+        print("\n----------\n{}\n---------".format(user.to_json))
         self.assertTrue(user.id)
         self.assertEqual(user.username,'testname')
         self.assertEqual(user.email,'test@email.com')
@@ -32,21 +33,25 @@ class TestUserModel(BaseTestCase):
 
     def test_to_json(self):
         user = add_user('testname','test@email.com', 'testpass')
+        print("\n----------\n{}\n---------".format(user.to_json))
         self.assertTrue(isinstance(user.to_json(), dict)) # to_json method should result in a dict
 
     def test_passwords(self):
         user_one = add_user('test', 'test@test.com', 'testpass')
         user_two = add_user('test2', 'test2@test.com', 'testpass')
+        print("\n----------\n{} |  {}\n---------".format(user_one.password, user_two.password))
         self.assertNotEqual(user_one.password, user_two.password)
 
     def test_encode_jwt(self):
         user = add_user('test', 'test@test.com', 'testpass')
         token = user.encode_jwt(user.id)
+        print("\n----------\n{}\n---------".format(token))
         self.assertTrue(isinstance(token, bytes))
 
     def test_decode_jwt(self):
         user = add_user('test','test@test.com', 'testpass')
         token = user.encode_jwt(user.id)
+        print("\n----------\n{}\n---------".format(token))
         self.assertTrue(isinstance(token, bytes))
         self.assertEqual(User.decode_jwt(token), user.id)
 

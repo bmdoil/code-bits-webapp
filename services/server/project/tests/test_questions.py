@@ -461,26 +461,15 @@ class TestQuestions(BaseTestCase):
                 content_type='application/json'                
             )
             token = json.loads(response_login.data.decode())['token']
-            get_response = self.client.get(
-                f'/questions/{question.id}/user/{user.id}',
-                headers={'Authorization': f'Bearer {token}'}
-            )
-            data = json.loads(get_response.data.decode())
-            self.assertEqual(get_response.status_code, 200)
-            self.assertIn('test', data['data']['body'])
-            self.assertIn('test', data['data']['test_code'])
-
             delete_response = self.client.delete(
-                f'/questions/{question_2.id}/user/{user.id}',
-                data=json.dumps({'body': 'updatedquestionhere'}),
-                content_type='application/json',
+                f'/questions/{question_2.id}/user/{user_2.id}',
                 headers={'Authorization': f'Bearer {token}'}                
             )
             delete_data = json.loads(delete_response.data.decode())
             print("\n----------\n{}\n---------".format(delete_data))
             self.assertEqual(delete_response.status_code, 403)
-            self.assertIn('fail', data['status'])
-            self.assertIn('You do not have permission to delete this question', data['message'])
+            self.assertIn('fail', delete_data['status'])
+            self.assertIn('You do not have permission to delete this question', delete_data['message'])
 
 
 if __name__ == '__main__':

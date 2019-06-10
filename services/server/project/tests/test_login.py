@@ -21,6 +21,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type = 'application/json'
             )
         data = json.loads(response.data.decode())
+        print("\n----------\n{}\n---------".format(data))
         self.assertTrue(data['status'] == 'success')
         self.assertTrue(data['message'] == 'Registered')
         self.assertTrue(response.content_type == 'application/json')
@@ -36,6 +37,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type = 'application/json'
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 400)
             self.assertIn('Empty payload', data['message'])
             self.assertIn('fail', data['status'])
@@ -50,6 +52,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type = 'text/html'
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 406)
             self.assertIn('This endpoint only accepts json', data['message'])
             self.assertIn('fail', data['status'])
@@ -63,6 +66,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type = 'application/json'
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 400)
             self.assertIn('Invalid payload', data['message'])
             self.assertIn('fail', data['status'])
@@ -77,6 +81,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type = 'application/json'
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 400)
             self.assertIn('Invalid payload', data['message'])
             self.assertIn('fail', data['status'])
@@ -90,6 +95,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type = 'application/json'
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 400)
             self.assertIn('Invalid payload', data['message'])
             self.assertIn('fail', data['status'])
@@ -109,6 +115,7 @@ class TestLoginRoute(BaseTestCase):
                 
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 400)
             self.assertIn('User already exists', data['message'])
             self.assertIn('fail', data['status'])
@@ -123,6 +130,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type='application/json',
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 200)
             self.assertTrue(data['status'] == 'success')
             self.assertTrue(data['message'] == 'Logged In')
@@ -139,6 +147,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type='application/json',
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 404)
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(data['message'] == 'Username or password incorrect')
@@ -161,6 +170,7 @@ class TestLoginRoute(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertTrue(data['status'] == 'success')
             self.assertTrue(data['message'] == 'Logged Out')
             self.assertEqual(response.status_code, 200)
@@ -188,6 +198,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type='application/json'
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(data['message'] == 'Please log in again.')
             self.assertEqual(response.status_code, 403)
@@ -202,6 +213,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type='application/json'
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(data['message'] == 'Unauthorized')
             self.assertEqual(response.status_code, 403)
@@ -224,7 +236,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type='application/json'
             )
             data = json.loads(response.data.decode())
-
+            print("\n----------\n{}\n---------".format(data))
             self.assertTrue(data['message'] == 'Success')
             self.assertTrue(data['status'] == 'success')
             self.assertTrue(data['data'] is not None)
@@ -242,6 +254,7 @@ class TestLoginRoute(BaseTestCase):
                 content_type='application/json'
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(data['message'] == 'Unauthorized')
             self.assertEqual(response.status_code, 403)
@@ -268,6 +281,7 @@ class TestLoginRoute(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(data['message'] == 'Unauthorized')
             self.assertEqual(response.status_code, 401)
@@ -295,6 +309,7 @@ class TestLoginRoute(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertTrue(data['status'] == 'fail')
             self.assertTrue(data['message'] == 'Unauthorized')
             self.assertEqual(response.status_code, 401)
