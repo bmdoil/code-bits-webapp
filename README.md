@@ -1,3 +1,5 @@
+https://travis-ci.org/bmdoil/bdoil-cs493-grading-final.svg?branch=master
+
 ## Grading Branch for CS493 Final Project
 
 ## Setup:
