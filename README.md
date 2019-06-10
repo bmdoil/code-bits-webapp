@@ -29,7 +29,7 @@
 
 - docker-compose exec server python manage.py test
 
-##To test with Travis CI
+## To test with Travis CI
 
 - Fork or clone the repo, then sign up on travis-ci.org if you don't already have an account
 
