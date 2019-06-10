@@ -2,11 +2,9 @@
 
 ## Setup:
 
-- Fork the repository: https://github.com/bmdoil/cs493-grading.git
+- Clone it to your machine: git clone https://github.com/bmdoil/bdoil-cs493-grading.git
 
-- Clone it to your machine: git clone https://github.com/[yourusername]/bdoil-cs493-grading.git
-
-- cd bdoil-cs493-grading
+- cd bdoil-cs493-grading-final
 
 ## To test the live routes
 
@@ -19,13 +17,7 @@
 
 - docker & docker-compose must be installed
 
-- docker -v  
-
-  Docker version 18.09.2, build 6247962
-
-- docker-compose -v 
-
-  docker-compose version 1.24.0, build 0aa59064
+- docker -v  && docker-compose -v
 
 - export BASE_URL=http://localhost
 

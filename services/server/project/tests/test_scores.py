@@ -7,8 +7,6 @@ from project.tests.utils import add_question, add_admin_user, add_user, add_scor
 class TestScores(BaseTestCase):
     """ Tests for the Scores API """
     def test_add_score(self):
-        """ Ensure a new score can be added to the database """
-
         # Must be authenticated to add score
         user = add_user('testuser', 'test@testing.io', 'testpass')
         question = add_question()
@@ -36,13 +34,13 @@ class TestScores(BaseTestCase):
                 headers=({'Authorization': f'Bearer {token}'})
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 201)
             self.assertIn('Score added', data['message'])
             self.assertIn('success', data['status'])
 
 
     def test_add_score_invalid_keys(self):
-        """ Error thrown if invalid JSON object """
         # Must be authenticated to add score
         user = add_user('testuser', 'test@testing.io', 'testpass')
         question = add_question()
@@ -68,13 +66,13 @@ class TestScores(BaseTestCase):
                 headers=({'Authorization': f'Bearer {token}'})
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 400)
             self.assertIn('Invalid payload', data['message'])
             self.assertIn('fail', data['status'])
 
 
     def test_add_score_duplicate(self):
-        """ Allow duplicate scores """
         # Must be authenticated to add score
         user = add_user('testuser', 'test@testing.io', 'testpass')
         question = add_question()
@@ -115,12 +113,12 @@ class TestScores(BaseTestCase):
                 headers=({'Authorization': f'Bearer {token}'})
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 201)
             self.assertIn('Score added', data['message'])
             self.assertIn('success', data['status'])
 
     def test_add_score_no_auth(self):
-        """ Error thrown if no Auth header """
         user = add_user('testuser', 'test@testing.io', 'testpass')
         question = add_question()
         with self.client:
@@ -136,12 +134,12 @@ class TestScores(BaseTestCase):
                 content_type='application/json'
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 403)
             self.assertIn('Forbidden', data['message'])
             self.assertIn('fail', data['status'])
 
     def test_add_score_admin(self):
-        """ Ensure a new question can be added to the database """
         user = add_admin_user('testuser', 'test@testing.io', 'testpass')
         question = add_question()
         with self.client:
@@ -168,13 +166,13 @@ class TestScores(BaseTestCase):
                 headers=({'Authorization': f'Bearer {token}'})
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 201)
             self.assertIn('Score added', data['message'])
             self.assertIn('success', data['status'])
 
 
     def test_add_score_no_content_header(self):
-        """ Ensure a new question can be added to the database """
         user = add_admin_user('testuser', 'test@testing.io', 'testpass')
         question = add_question()
         with self.client:
@@ -200,12 +198,12 @@ class TestScores(BaseTestCase):
                 headers=({'Authorization': f'Bearer {token}'})
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 406)
             self.assertIn('This endpoint only accepts json', data['message'])
             self.assertIn('fail', data['status'])
 
     def test_get_all_scores(self):
-        """ Ensure getting all questions is working for admin"""
         # Must be authenticated to add score
         add_user('testuser', 'test@testing.io', 'testpass')
         add_question()
@@ -239,6 +237,7 @@ class TestScores(BaseTestCase):
                 headers=({'Authorization': f'Bearer {token}'})
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 200)
             self.assertEqual(len(data['data']['scores']), 5)
 
@@ -263,7 +262,8 @@ class TestScores(BaseTestCase):
                 '/scores',
                 content_type='application/json',
             )
-            data = json.loads(response.data.decode()) 
+            data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 403)
             self.assertIn('fail', data['status'])      
 
@@ -293,13 +293,13 @@ class TestScores(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 200)
             self.assertEqual(len(data['data']['scores']), 5)
             self.assertTrue(data['data']['scores'][0]['self'])
 
 
     def test_get_user_score(self):
-        """ Ensure get authenticated user score works """
         user = add_user('testuser', 'test@testing.io', 'testpass')
         add_question()
         score = add_score()
@@ -319,6 +319,7 @@ class TestScores(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 200)
             self.assertEqual(data['data']['user_id'], 1)
             self.assertEqual(data['data']['question_id'], 1)
@@ -327,7 +328,6 @@ class TestScores(BaseTestCase):
             self.assertEqual(data['data']['runtime'], 10)
 
     def test_get_user_score_noauth(self):
-        """ Ensure fails with 401 unauthorized """
         user = add_user('testuser', 'test@testing.io', 'testpass')
         add_question()
         score = add_score()
@@ -337,13 +337,13 @@ class TestScores(BaseTestCase):
                 headers={'Authorization': f'Bearer fail'}
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 401)
             self.assertIn('fail', data['status'])
             self.assertIn('Unauthorized', data['message'])
 
 
     def test_get_user_score_incorrect_user(self):
-        """ Ensure get wrong user score fails with 403 """
         add_user('testuser', 'test@testing.io', 'testpass')
         add_question()
         score = add_score()       
@@ -363,6 +363,7 @@ class TestScores(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 403)
             self.assertIn('fail', data['status'])
             self.assertIn('You do not have permission to view this score', data['message'])
@@ -386,6 +387,7 @@ class TestScores(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(get_response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(get_response.status_code, 200)
             self.assertEqual(data['data']['user_id'], 1)
             self.assertEqual(data['data']['question_id'], 1)
@@ -400,6 +402,7 @@ class TestScores(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}                
             )
             put_data = json.loads(put_response.data.decode())
+            print("\n----------\n{}\n---------".format(put_data))
             self.assertEqual(put_response.status_code, 201)
             self.assertEqual(put_data['data']['user_id'], 1)
             self.assertEqual(put_data['data']['question_id'], 1)
@@ -432,6 +435,7 @@ class TestScores(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(get_response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(get_response.status_code, 200)
             self.assertEqual(data['data']['user_id'], 1)
             self.assertEqual(data['data']['question_id'], 1)
@@ -446,6 +450,7 @@ class TestScores(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}                
             )
             put_data = json.loads(put_response.data.decode())
+            print("\n----------\n{}\n---------".format(put_data))
             self.assertEqual(put_response.status_code, 403)
             self.assertIn('fail', put_data['status'])
             self.assertIn('You do not have permission to update this score', put_data['message'])
@@ -478,7 +483,6 @@ class TestScores(BaseTestCase):
                 f'/scores/{score.id}/user/{user.id}',
                 headers={'Authorization': f'Bearer {token}'}
             )
-            # print(delete_response)
             self.assertEqual(delete_response.status_code, 204)
 
     def test_delete_user_score_unauthorized(self):
@@ -521,6 +525,7 @@ class TestScores(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}                
             )
             delete_data = json.loads(delete_response.data.decode())
+            print("\n----------\n{}\n---------".format(delete_data))
             self.assertEqual(delete_response.status_code, 403)
             self.assertIn('fail', delete_data['status'])
             self.assertIn('You do not have permission to delete this score', delete_data['message'])

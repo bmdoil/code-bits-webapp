@@ -7,8 +7,6 @@ from project.tests.utils import add_question, add_admin_user, add_user
 class TestQuestions(BaseTestCase):
     """ Tests for the Questions API. """
     def test_add_question(self):
-        """ Ensure a new question can be added to the database """
-
         # Must be authenticated to add question
         add_user('testuser', 'test@testing.io', 'testpass')
         with self.client:
@@ -35,12 +33,12 @@ class TestQuestions(BaseTestCase):
                 headers=({'Authorization': f'Bearer {token}'})
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 201)
             self.assertIn('Question added', data['message'])
             self.assertIn('success', data['status'])
             
     def test_add_question_invalid_keys(self):
-        """ Error thrown if invalid JSON object """
         add_admin_user('testuser', 'test@testing.io', 'testpass')
         with self.client:
             response_login = self.client.post(
@@ -59,12 +57,12 @@ class TestQuestions(BaseTestCase):
                 headers=({'Authorization': f'Bearer {token}'})
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 400)
             self.assertIn('Invalid payload', data['message'])
             self.assertIn('fail', data['status'])
 
     def test_add_question_duplicate(self):
-        """ Allow duplicate questions """
         add_user('testuser', 'test@testing.io', 'testpass')
         with self.client:
             response_login = self.client.post(
@@ -103,13 +101,13 @@ class TestQuestions(BaseTestCase):
                 headers=({'Authorization': f'Bearer {token}'})
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 201)
             self.assertIn('Question added', data['message'])
             self.assertIn('success', data['status'])
 
 
     def test_add_question_no_auth(self):
-        """ Error thrown if no Auth header """
         with self.client:
             response = self.client.post(
                 '/questions',
@@ -123,14 +121,13 @@ class TestQuestions(BaseTestCase):
                 content_type='application/json'
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 403)
             self.assertIn('Forbidden', data['message'])
             self.assertIn('fail', data['status'])
 
 
     def test_add_question_admin(self):
-        """ Ensure a new question can be added to the database """
-
         # Must be authenticated to add question
         add_admin_user('testuser', 'test@testing.io', 'testpass')
         with self.client:
@@ -157,12 +154,12 @@ class TestQuestions(BaseTestCase):
                 headers=({'Authorization': f'Bearer {token}'})
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 201)
             self.assertIn('Question added', data['message'])
             self.assertIn('success', data['status'])
 
     def test_get_all_questions(self):
-        """ Ensure getting all questions is working for admin"""
         # By default this user will have id=1. At least 1 user is required to add questions
         add_admin_user('testuser', 'test@testing.io', 'testpass')
         with self.client:
@@ -188,6 +185,7 @@ class TestQuestions(BaseTestCase):
             )
 
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 200)
             self.assertEqual(len(data['data']['questions']), 2)
             self.assertIn(
@@ -239,6 +237,7 @@ class TestQuestions(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 200)
             self.assertEqual(len(data['data']['questions']), 2)
             self.assertIn(
@@ -267,7 +266,6 @@ class TestQuestions(BaseTestCase):
 
 
     def test_get_user_question(self):
-        """ Ensure get authenticated user question works """
         user = add_user('testuser', 'test@testing.io', 'testpass')
         question = add_question()
         with self.client:
@@ -286,12 +284,12 @@ class TestQuestions(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 200)
             self.assertIn('test', data['data']['body'])
             self.assertIn('test', data['data']['test_code'])
 
     def test_get_user_question_noauth(self):
-        """ Ensure fails with 401 unauthorized """
         user = add_user('testuser', 'test@testing.io', 'testpass')
         question = add_question()
         with self.client:
@@ -306,7 +304,6 @@ class TestQuestions(BaseTestCase):
 
 
     def test_get_user_question_incorrect_user(self):
-        """ Ensure get wrong user question fails with 403 """
         add_user('testuser', 'test@testing.io', 'testpass')
         question = add_question()
         with self.client:
@@ -325,6 +322,7 @@ class TestQuestions(BaseTestCase):
                 headers={'Authorization': f'Bearer {token}'}
             )
             data = json.loads(response.data.decode())
+            print("\n----------\n{}\n---------".format(data))
             self.assertEqual(response.status_code, 403)
             self.assertIn('fail', data['status'])
             self.assertIn('You do not have permission to view this question', data['message'])
@@ -359,6 +357,7 @@ class TestQuestions(BaseTestCase):
             )
 
             put_data = json.loads(put_response.data.decode())
+            print("\n----------\n{}\n---------".format(put_data))
             self.assertEqual(put_response.status_code, 201)
             self.assertIn('updatedquestionhere', put_data['data']['body'])
             self.assertIn('success', put_data['status'])
@@ -403,6 +402,7 @@ class TestQuestions(BaseTestCase):
             )
 
             put_data = json.loads(put_response.data.decode())
+            print("\n----------\n{}\n---------".format(put_data))
             self.assertEqual(put_response.status_code, 403)
             self.assertIn('fail', put_data['status'])
             self.assertIn('You do not have permission to update this question', put_data['message'])
@@ -436,7 +436,6 @@ class TestQuestions(BaseTestCase):
                 f'/questions/{question.id}/user/{user.id}',
                 headers={'Authorization': f'Bearer {token}'}
             )
-            # print(delete_response)
             self.assertEqual(delete_response.status_code, 204)
 
 
@@ -472,12 +471,13 @@ class TestQuestions(BaseTestCase):
             self.assertIn('test', data['data']['test_code'])
 
             delete_response = self.client.delete(
-                f'/questions/{question_2.id}/user/{user_2.id}',
+                f'/questions/{question_2.id}/user/{user.id}',
                 data=json.dumps({'body': 'updatedquestionhere'}),
                 content_type='application/json',
                 headers={'Authorization': f'Bearer {token}'}                
             )
-            data = json.loads(delete_response.data.decode())
+            delete_data = json.loads(delete_response.data.decode())
+            print("\n----------\n{}\n---------".format(delete_data))
             self.assertEqual(delete_response.status_code, 403)
             self.assertIn('fail', data['status'])
             self.assertIn('You do not have permission to delete this question', data['message'])
