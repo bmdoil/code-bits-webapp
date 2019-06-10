@@ -5,5 +5,4 @@ node_modules
 services/client/node_modules
 .vscode
 docker-compose-prod.yml
-node_modules
 

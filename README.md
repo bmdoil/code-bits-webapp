@@ -2,7 +2,7 @@
 
 ## Setup:
 
-- Clone it to your machine: git clone https://github.com/bmdoil/bdoil-cs493-grading.git
+- Clone it to your machine: git clone https://github.com/bmdoil/bdoil-cs493-grading-final.git
 
 - cd bdoil-cs493-grading-final
 
