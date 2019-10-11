@@ -21,7 +21,7 @@
 
 - docker -v  && docker-compose -v
 
-- export BASE_URL=http://localhost
+- export REACT_APP_SERVER_SERVICE_URL=http://localhost
 
 - docker-compose up -d --build
 

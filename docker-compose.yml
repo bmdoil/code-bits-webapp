@@ -52,7 +52,7 @@ services:
       - 3007:3000
     environment: 
       - NODE_ENV=development
-      - BASE_URL=http://localhost
+      - REACT_APP_SERVER_SERVICE_URL=${REACT_APP_SERVER_SERVICE_URL}
     depends_on:
       - server
 
